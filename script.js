@@ -70,15 +70,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     noBtn.addEventListener('mouseover', moveNoButton);
     noBtn.addEventListener('click', async (e) => {
-        // Google Forms'a veri gönder
-        const formData = new FormData();
-        formData.append('entry.920808357', 'HAYIR');
+        const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScgkzUhBORUYICu87YLZdStjfSGWtzAe3IKhuAqrdxI9-T4UA/formResponse';
         
         try {
-            await fetch('https://docs.google.com/forms/d/e/920808357/formResponse', {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
+            await fetch(`${formUrl}?entry.920808357=Hayır`, {
+                method: 'GET',
+                mode: 'no-cors',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
             });
             console.log('Cevap kaydedildi: HAYIR');
         } catch (error) {
@@ -91,14 +92,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Evet butonu için
     yesBtn.addEventListener('click', async () => {
         // Google Forms'a veri gönder
-        const formData = new FormData();
-        formData.append('entry.920808357', 'EVET');
+        const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScgkzUhBORUYICu87YLZdStjfSGWtzAe3IKhuAqrdxI9-T4UA/formResponse';
         
         try {
-            await fetch('https://docs.google.com/forms/d/e/920808357/formResponse', {
-                method: 'POST',
-                body: formData,
-                mode: 'no-cors'
+            await fetch(`${formUrl}?entry.920808357=Evet`, {
+                method: 'GET',
+                mode: 'no-cors',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
             });
             console.log('Cevap kaydedildi: EVET');
         } catch (error) {
@@ -265,7 +268,7 @@ function createMatrixEffect() {
             const heart = hearts[Math.floor(Math.random() * hearts.length)];
             ctx.fillText(heart, i * fontSize, drops[i] * fontSize);
             
-            // Kalplerin düşme hızını ve yeniden başlama olasıl��ğını ayarla
+            // Kalplerin düşme hızını ve yeniden başlama olasılğını ayarla
             if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
