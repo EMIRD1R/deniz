@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Deniz için... ✨</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(45deg, #0a0a2e, #1a1a3a);
+        overflow: hidden;
+        font-family: "Arial", sans-serif;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        perspective: 1000px;
+      }
+
+      .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle var(--duration) infinite;
+      }
+
+      .heart-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        opacity: 0.1;
+        background: radial-gradient(circle, #ff3366 0%, transparent 70%);
+        animation: pulse 2s infinite;
+      }
+
+      .main-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 0 30px rgba(255, 51, 102, 0.2);
+        transform-style: preserve-3d;
+        animation: float 6s infinite ease-in-out;
+      }
+
+      .message {
+        font-size: 2em;
+        margin: 20px;
+        opacity: 0;
+        transform: translateZ(50px);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        animation: fadeInMessage 1s forwards;
+      }
+
+      .buttons {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+        animation-delay: 8s;
+      }
+
+      .btn {
+        padding: 15px 50px;
+        margin: 15px;
+        font-size: 1.3em;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        z-index: 100;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      #yes-btn {
+        background: linear-gradient(45deg, #ff3366, #ff6b6b);
+        color: white;
+        box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+      }
+
+      #yes-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 25px rgba(255, 51, 102, 0.6);
+      }
+
+      #no-btn {
+        background: transparent;
+        border: 2px solid #ff3366;
+        color: white;
+      }
+
+      #no-btn:hover {
+        background: rgba(255, 51, 102, 0.1);
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(2deg);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.2;
+        }
+      }
+
+      @keyframes fadeInMessage {
+        to {
+          opacity: 1;
+          transform: translateZ(0);
+        }
+      }
+
+      @keyframes sparkle {
+        0%,
+        100% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        animation: sparkle 1s infinite;
+      }
+
+      .final-message {
+        font-size: 2.5em;
+        animation: scaleIn 1s forwards;
+        opacity: 0;
+      }
+
+      @keyframes scaleIn {
+        from {
+          transform: scale(0);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stars"></div>
+    <div class="heart-bg"></div>
+    <div class="main-content">
+      <div id="matrix-text"></div>
+      <div id="message-container">
+        <div class="message hacker-text" id="system-message">
+          > Sistem başlatılıyor...
+        </div>
+        <div id="welcome-message" class="welcome-message hacker-text">
+          > Hoşgeldin Deniz...
+        </div>
+        <div class="message hacker-text">
+          > Biliyorum, çıkma teklifi kaldırıldı...
+        </div>
+        <div class="message hacker-text">
+          > Ama ben sana geri getireceğimi söylemiştim Deniz...
+        </div>
+        <div class="message hacker-text">
+          > Ve bir yazılımcı asla vazgeçmez! ❤️
+        </div>
+        <div class="message hacker-text">
+          > Benimle çıkar mısın? 💝
+        </div>
+        <div class="buttons" style="display: none;">
+          <button class="btn" id="yes-btn">EVET 💝</button>
+          <button class="btn" id="no-btn">HAYIR 💔</button>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
