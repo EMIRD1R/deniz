@@ -69,16 +69,45 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     
     noBtn.addEventListener('mouseover', moveNoButton);
-    noBtn.addEventListener('click', moveNoButton);
-    noBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+    noBtn.addEventListener('click', async (e) => {
+        // Google Forms'a veri gönder
+        const formData = new FormData();
+        formData.append('entry.920808357', 'HAYIR');
+        
+        try {
+            await fetch('https://docs.google.com/forms/d/e/920808357/formResponse', {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            });
+            console.log('Cevap kaydedildi: HAYIR');
+        } catch (error) {
+            console.error('Form gönderiminde hata:', error);
+        }
+        
         moveNoButton();
     });
     
     // Evet butonu için
     yesBtn.addEventListener('click', async () => {
+        // Google Forms'a veri gönder
+        const formData = new FormData();
+        formData.append('entry.920808357', 'EVET');
+        
+        try {
+            await fetch('https://docs.google.com/forms/d/e/920808357/formResponse', {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            });
+            console.log('Cevap kaydedildi: EVET');
+        } catch (error) {
+            console.error('Form gönderiminde hata:', error);
+        }
+        
         // Mevcut mesajları gizle
         messageContainer.style.display = 'none';
+        
         
         // Özel stil ekle
         const style = document.createElement('style');
@@ -236,7 +265,7 @@ function createMatrixEffect() {
             const heart = hearts[Math.floor(Math.random() * hearts.length)];
             ctx.fillText(heart, i * fontSize, drops[i] * fontSize);
             
-            // Kalplerin düşme hızını ve yeniden başlama olasılığını ayarla
+            // Kalplerin düşme hızını ve yeniden başlama olasıl��ğını ayarla
             if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
