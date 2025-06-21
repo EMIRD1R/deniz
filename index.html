@@ -8,14 +8,54 @@
       body {
         margin: 0;
         height: 100vh;
-        background: linear-gradient(45deg, #0a0a2e, #1a1a3a);
+        background: 
+          linear-gradient(45deg, #000000 0%, #1a0000 25%, #330000 50%, #1a0000 75%, #000000 100%),
+          repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 0, 0, 0.1) 2px,
+            rgba(255, 0, 0, 0.1) 4px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.05) 2px,
+            rgba(255, 255, 255, 0.05) 4px
+          );
+        background-size: 100% 100%, 8px 8px, 4px 4px;
+        animation: systemDestroy 3s infinite;
         overflow: hidden;
-        font-family: "Arial", sans-serif;
-        color: white;
+        font-family: "Courier New", monospace;
+        color: #ff0000;
         display: flex;
         align-items: center;
         justify-content: center;
         perspective: 1000px;
+      }
+
+      @keyframes systemDestroy {
+        0% { 
+          filter: contrast(1) brightness(1) hue-rotate(0deg);
+          background-position: 0 0, 0 0, 0 0;
+        }
+        25% { 
+          filter: contrast(1.2) brightness(0.8) hue-rotate(90deg);
+          background-position: 10px 5px, 2px 2px, 1px 1px;
+        }
+        50% { 
+          filter: contrast(0.8) brightness(1.2) hue-rotate(180deg);
+          background-position: -5px 10px, -2px 4px, -1px 2px;
+        }
+        75% { 
+          filter: contrast(1.5) brightness(0.7) hue-rotate(270deg);
+          background-position: 15px -5px, 4px -2px, 2px -1px;
+        }
+        100% { 
+          filter: contrast(1) brightness(1) hue-rotate(360deg);
+          background-position: 0 0, 0 0, 0 0;
+        }
       }
 
       .stars {
@@ -40,9 +80,22 @@
         width: 100%;
         height: 100%;
         z-index: 1;
-        opacity: 0.1;
-        background: radial-gradient(circle, #ff3366 0%, transparent 70%);
-        animation: pulse 2s infinite;
+        opacity: 0.2;
+        background: radial-gradient(circle, #ff0000 0%, #660000 30%, transparent 70%);
+        animation: systemPulse 1.5s infinite;
+      }
+
+      @keyframes systemPulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 0.1;
+          filter: blur(0px);
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.3;
+          filter: blur(2px);
+        }
       }
 
       .main-content {
@@ -61,10 +114,12 @@
       .message {
         font-size: 2em;
         margin: 20px;
-        opacity: 0;
-        transform: translateZ(50px);
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        animation: fadeInMessage 1s forwards;
+        opacity: 1;
+        color: #ff0000;
+        font-family: 'Courier New', monospace;
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+        transform: translateZ(0);
+        display: block;
       }
 
       .buttons {
@@ -141,18 +196,6 @@
         }
       }
 
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-          opacity: 0.1;
-        }
-        50% {
-          transform: scale(1.1);
-          opacity: 0.2;
-        }
-      }
-
       @keyframes fadeInMessage {
         to {
           opacity: 1;
@@ -208,36 +251,626 @@
           transform: translateY(0);
         }
       }
+
+      /* SİSTEM BOZULDU EFEKTLERİ */
+      .system-error {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 9999;
+        display: none;
+        overflow: hidden;
+      }
+
+      .glitch-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: 
+          repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 98px,
+            rgba(255, 0, 0, 0.03) 100px
+          ),
+          repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 0, 0.03) 3px
+          );
+        animation: glitch-bg 0.3s infinite;
+      }
+
+      @keyframes glitch-bg {
+        0% { transform: translate(0); }
+        20% { transform: translate(-2px, 2px); }
+        40% { transform: translate(-2px, -2px); }
+        60% { transform: translate(2px, 2px); }
+        80% { transform: translate(2px, -2px); }
+        100% { transform: translate(0); }
+      }
+
+      .error-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ff0000;
+        font-family: 'Courier New', monospace;
+        font-size: 2em;
+        text-align: center;
+        animation: glitch-text 0.5s infinite;
+        text-shadow: 
+          -2px 0 #00ffff,
+          2px 0 #ff00ff,
+          0 0 10px #ff0000;
+      }
+
+      @keyframes glitch-text {
+        0% { 
+          transform: translate(-50%, -50%);
+          filter: hue-rotate(0deg);
+        }
+        10% { 
+          transform: translate(-52%, -48%);
+          filter: hue-rotate(90deg);
+        }
+        20% { 
+          transform: translate(-48%, -52%);
+          filter: hue-rotate(180deg);
+        }
+        30% { 
+          transform: translate(-52%, -48%);
+          filter: hue-rotate(270deg);
+        }
+        40% { 
+          transform: translate(-48%, -52%);
+          filter: hue-rotate(360deg);
+        }
+        50% { 
+          transform: translate(-50%, -50%);
+          filter: hue-rotate(90deg);
+        }
+        60% { 
+          transform: translate(-52%, -48%);
+          filter: hue-rotate(180deg);
+        }
+        70% { 
+          transform: translate(-48%, -52%);
+          filter: hue-rotate(270deg);
+        }
+        80% { 
+          transform: translate(-52%, -48%);
+          filter: hue-rotate(360deg);
+        }
+        90% { 
+          transform: translate(-48%, -52%);
+          filter: hue-rotate(90deg);
+        }
+        100% { 
+          transform: translate(-50%, -50%);
+          filter: hue-rotate(0deg);
+        }
+      }
+
+      .static-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+          radial-gradient(circle, transparent 20%, rgba(255,255,255,0.1) 20.1%),
+          linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.05) 25%, transparent 26%);
+        background-size: 3px 3px, 100% 3px;
+        animation: static 0.1s infinite linear;
+        pointer-events: none;
+        z-index: 1000;
+        opacity: 0;
+      }
+
+      @keyframes static {
+        0% { 
+          background-position: 0 0, 0 0;
+          opacity: 0.8;
+        }
+        100% { 
+          background-position: 3px 3px, 0 3px;
+          opacity: 0.3;
+        }
+      }
+
+      .screen-tear {
+        position: fixed;
+        width: 100%;
+        height: 2px;
+        background: #fff;
+        z-index: 1001;
+        animation: tear 0.8s infinite;
+        opacity: 0;
+      }
+
+      @keyframes tear {
+        0% { 
+          top: -2px;
+          opacity: 0;
+        }
+        50% { 
+          opacity: 1;
+        }
+        100% { 
+          top: 100vh;
+          opacity: 0;
+        }
+      }
+
+      .broken-heart {
+        color: #ff0000 !important;
+        animation: heartbreak 2s infinite;
+        filter: drop-shadow(0 0 10px #ff0000);
+      }
+
+      @keyframes heartbreak {
+        0% { transform: scale(1) rotate(0deg); }
+        25% { transform: scale(1.1) rotate(-5deg); }
+        50% { transform: scale(0.9) rotate(5deg); }
+        75% { transform: scale(1.1) rotate(-5deg); }
+        100% { transform: scale(1) rotate(0deg); }
+      }
+
+      .error-message {
+        color: #ff0000;
+        text-shadow: 0 0 10px #ff0000;
+        animation: error-flash 1s infinite;
+      }
+
+      @keyframes error-flash {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+
+      /* SİSTEM ARIZA EFEKTLERİ */
+      .system-crash {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 9999;
+        display: none;
+        overflow: hidden;
+      }
+
+      .digital-rain {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9998;
+      }
+
+      .error-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #000;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        z-index: 9999;
+        display: none;
+      }
+
+      .error-popup h2 {
+        color: #ff0000;
+        font-size: 2em;
+        margin-bottom: 20px;
+      }
+
+      .error-popup p {
+        color: #ff0000;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+
+      .error-popup button {
+        padding: 10px 20px;
+        font-size: 1.2em;
+        border: none;
+        border-radius: 5px;
+        background: #ff0000;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .error-popup button:hover {
+        background: #ff3333;
+      }
+
+      /* YIKINTI EFEKTLERİ */
+      .ruins-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+          linear-gradient(45deg, transparent 40%, rgba(255, 0, 0, 0.1) 50%, transparent 60%),
+          linear-gradient(-45deg, transparent 40%, rgba(255, 0, 0, 0.1) 50%, transparent 60%);
+        animation: ruinsFlicker 0.2s infinite;
+        pointer-events: none;
+        z-index: 100;
+      }
+
+      @keyframes ruinsFlicker {
+        0% { opacity: 0; }
+        5% { opacity: 1; }
+        10% { opacity: 0; }
+        15% { opacity: 0.8; }
+        20% { opacity: 0; }
+        100% { opacity: 0; }
+      }
+
+      .system-fragments {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 99;
+      }
+
+      .fragment {
+        position: absolute;
+        color: #ff0000;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        animation: fragmentFall linear infinite;
+        opacity: 0.7;
+      }
+
+      @keyframes fragmentFall {
+        0% {
+          transform: translateY(-100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .corruption-lines {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 98;
+      }
+
+      .corruption-line {
+        position: absolute;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #ff0000, transparent);
+        animation: corruptionSweep 3s infinite;
+      }
+
+      @keyframes corruptionSweep {
+        0% { 
+          left: -100%;
+          width: 50%;
+          opacity: 1;
+        }
+        50% {
+          width: 30%;
+          opacity: 0.8;
+        }
+        100% { 
+          left: 100%;
+          width: 20%;
+          opacity: 0;
+        }
+      }
+
+      .system-noise {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><pattern id="noise" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ff0000" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23noise)"/></svg>');
+        animation: noiseShift 0.1s infinite linear;
+        pointer-events: none;
+        z-index: 97;
+        mix-blend-mode: screen;
+      }
+
+      @keyframes noiseShift {
+        0% { background-position: 0 0; }
+        100% { background-position: 100px 100px; }
+      }
+
+      /* LOADING BAR STİLLERİ */
+      #loading-container {
+        margin-top: 40px;
+        text-align: center;
+      }
+
+      .loading-bar {
+        width: 400px;
+        height: 20px;
+        background: #000;
+        border: 2px solid #ff0000;
+        border-radius: 10px;
+        margin: 0 auto 20px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+      }
+
+      .loading-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ff0000, #ff3333, #ff6666);
+        width: 0%;
+        transition: width 0.3s ease;
+        position: relative;
+        animation: loadingPulse 1s infinite;
+      }
+
+      .loading-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: loadingShine 2s infinite;
+      }
+
+      .loading-text {
+        color: #ff0000;
+        font-family: 'Courier New', monospace;
+        font-size: 1.2em;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+        animation: textFlicker 0.5s infinite;
+      }
+
+      @keyframes loadingPulse {
+        0%, 100% { 
+          box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.8);
+        }
+        50% { 
+          box-shadow: inset 0 0 20px rgba(255, 0, 0, 1);
+        }
+      }
+
+      @keyframes loadingShine {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(400px); }
+      }
+
+      @keyframes textFlicker {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+
+      /* FINAL MESAJ STİLLERİ */
+      .final-message-card {
+        background: linear-gradient(45deg, #000000, #1a0000);
+        padding: 60px;
+        border-radius: 20px;
+        border: 5px solid #ff0000;
+        box-shadow: 
+          0 0 50px rgba(255, 0, 0, 1),
+          inset 0 0 30px rgba(255, 0, 0, 0.3);
+        text-align: center;
+        animation: finalCardPulse 1s infinite;
+      }
+
+      .final-title {
+        color: #ff0000;
+        font-size: 3.5em;
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        text-shadow: 
+          0 0 20px rgba(255, 0, 0, 1),
+          -2px 0 #00ffff, 
+          2px 0 #ff00ff;
+        animation: finalTextGlitch 0.5s infinite;
+        margin-bottom: 20px;
+      }
+
+      .final-subtitle {
+        color: #ff0000;
+        font-size: 2.5em;
+        font-family: 'Courier New', monospace;
+        font-weight: bold;
+        text-shadow: 
+          0 0 15px rgba(255, 0, 0, 1),
+          -1px 0 #00ffff, 
+          1px 0 #ff00ff;
+        animation: finalTextGlitch 0.5s infinite;
+        animation-delay: 0.25s;
+      }
+
+      @keyframes finalCardPulse {
+        0% { 
+          box-shadow: 0 0 50px rgba(255, 0, 0, 1);
+          transform: scale(1);
+        }
+        50% { 
+          box-shadow: 0 0 100px rgba(255, 0, 0, 1);
+          transform: scale(1.02);
+        }
+        100% { 
+          box-shadow: 0 0 50px rgba(255, 0, 0, 1);
+          transform: scale(1);
+        }
+      }
+
+      @keyframes finalTextGlitch {
+        0% { 
+          text-shadow: 0 0 20px rgba(255, 0, 0, 1);
+          filter: contrast(1);
+        }
+        20% { 
+          text-shadow: -3px 0 #00ffff, 3px 0 #ff00ff, 0 0 20px rgba(255, 0, 0, 1);
+          filter: contrast(1.5);
+        }
+        40% { 
+          text-shadow: 2px 0 #00ffff, -2px 0 #ff00ff, 0 0 20px rgba(255, 0, 0, 1);
+          filter: contrast(0.8);
+        }
+        60% { 
+          text-shadow: -4px 0 #00ffff, 4px 0 #ff00ff, 0 0 20px rgba(255, 0, 0, 1);
+          filter: contrast(2);
+        }
+        80% { 
+          text-shadow: 1px 0 #00ffff, -1px 0 #ff00ff, 0 0 20px rgba(255, 0, 0, 1);
+          filter: contrast(0.5);
+        }
+        100% { 
+          text-shadow: 0 0 20px rgba(255, 0, 0, 1);
+          filter: contrast(1);
+        }
+      }
     </style>
   </head>
   <body>
-    <div class="stars"></div>
     <div class="heart-bg"></div>
+    
+    <!-- YIKINTI EFEKTLERİ -->
+    <div class="ruins-overlay"></div>
+    <div class="system-fragments"></div>
+    <div class="corruption-lines"></div>
+    <div class="system-noise"></div>
+    
+    <!-- SİSTEM BOZULDU EFEKTLERİ -->
+    <div class="static-overlay"></div>
+    <div class="screen-tear"></div>
+    
+    <!-- SİSTEM ARIZA EFEKTLERİ -->
+    <div class="system-crash"></div>
+    <div class="digital-rain"></div>
+    <div class="error-popup"></div>
+    
+    <!-- MÜZİK ELEMENTİ -->
+    <audio id="background-music" loop autoplay>
+      <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- TİKLA YAZISI -->
+    <div id="click-text" style="
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #ff0000;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #ff0000;
+      border-radius: 15px;
+      padding: 15px 30px;
+      font-family: 'Courier New', monospace;
+      font-size: 2em;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 99999;
+      text-shadow: 0 0 15px rgba(255, 0, 0, 1);
+      box-shadow: 
+        0 0 20px rgba(255, 0, 0, 0.8),
+        inset 0 0 10px rgba(255, 0, 0, 0.2);
+      animation: clickPulse 2s infinite;
+      user-select: none;
+      backdrop-filter: blur(5px);
+    ">
+      tıkla
+    </div>
+    
+    <style>
+      @keyframes clickPulse {
+        0% { 
+          opacity: 1; 
+          transform: translate(-50%, -50%) scale(1);
+          box-shadow: 0 0 20px rgba(255, 0, 0, 0.8), inset 0 0 10px rgba(255, 0, 0, 0.2);
+        }
+        50% { 
+          opacity: 0.9; 
+          transform: translate(-50%, -50%) scale(1.05);
+          box-shadow: 0 0 30px rgba(255, 0, 0, 1), inset 0 0 15px rgba(255, 0, 0, 0.4);
+        }
+        100% { 
+          opacity: 1; 
+          transform: translate(-50%, -50%) scale(1);
+          box-shadow: 0 0 20px rgba(255, 0, 0, 0.8), inset 0 0 10px rgba(255, 0, 0, 0.2);
+        }
+      }
+      
+      /* MOBİL RESPONSIVE */
+      @media (max-width: 768px) {
+        #click-text {
+          font-size: 1.5em !important;
+          padding: 12px 25px !important;
+          top: 15% !important;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        #click-text {
+          font-size: 1.2em !important;
+          padding: 10px 20px !important;
+          top: 10% !important;
+          border-radius: 10px !important;
+        }
+      }
+      
+      @media (max-width: 320px) {
+        #click-text {
+          font-size: 1em !important;
+          padding: 8px 15px !important;
+          top: 8% !important;
+        }
+      }
+    </style>
+
     <div class="main-content">
       <div id="matrix-text"></div>
       <div id="message-container">
-        <div class="message hacker-text" id="system-message">
+        <div class="message hacker-text" id="system-crash-msg" style="display: block;">
           > Sistem başlatılıyor...
         </div>
-        <div id="welcome-message" class="welcome-message hacker-text">
-          > Hoşgeldin Deniz...
+        <div class="message hacker-text" id="data-delete-msg" style="display: none;">
+          > Herşey yalanmış yalan veriler siliniyor...
         </div>
-        <div class="message hacker-text">
-          > Biliyorum, çıkma teklifi kaldırıldı...
+        <div id="loading-container" style="display: none;">
+          <div class="loading-bar">
+            <div class="loading-fill"></div>
+          </div>
+          <div class="loading-text">DELETING YALAN... <span id="loading-percent">0%</span></div>
         </div>
-        <div class="message hacker-text">
-          > Ama ben sana geri getireceğimi söylemiştim Deniz...
-        </div>
-        <div class="message hacker-text">
-          > Ve bir yazılımcı asla vazgeçmez! ❤️
-        </div>
-        <div class="message hacker-text">> Benimle çıkar mısın? 💝</div>
-        <div class="buttons" style="display: none">
-          <button class="btn" id="yes-btn">EVET 💝</button>
-          <button class="btn" id="no-btn">HAYIR 💔</button>
+        <div id="final-message-container" style="display: none;">
+          <div class="final-message-card">
+            <div class="final-title">AŞK BİTTİ</div>
+            <div class="final-subtitle">AŞK APTALLІKTI</div>
+          </div>
         </div>
       </div>
     </div>
+    
     <script src="script.js"></script>
   </body>
 </html>

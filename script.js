@@ -1,243 +1,203 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Konfeti scriptini başta yükle
-    await loadConfetti();
+    console.log('DOM loaded!');
+    
+    // MÜZİK SİSTEMİ - OTOMATIK BAŞLATMA
+    const music = document.getElementById('background-music');
+    
+    // Otomatik başlatma fonksiyonu
+    function autoStartMusic() {
+        if (music) {
+            music.currentTime = 15;
+            music.volume = 0.5;
+            music.play().then(() => {
+                console.log('🎵 Müzik başarıyla başladı!');
+            }).catch(e => {
+                console.log('Başlatma denemesi:', e.message);
+            });
+        }
+    }
+    
+    if (music) {
+        console.log('Müzik elementi bulundu');
+        
+        // Hemen başlatmayı dene
+        autoStartMusic();
+        
+        // Müzik yüklendiğinde
+        music.addEventListener('loadeddata', () => {
+            console.log('Müzik yüklendi');
+            music.currentTime = 15; // 15. saniyeye git
+            music.volume = 0.5;     // Ses seviyesi
+            music.play();           // Çal
+            console.log('🎵 Müzik 15. saniyeden başlatıldı!');
+        });
+        
+        // Eğer yüklenmişse direkt başlat
+        if (music.readyState >= 2) {
+            music.currentTime = 15;
+            music.volume = 0.5;
+            music.play();
+            console.log('🎵 Müzik zaten yüklü, 15. saniyeden başladı!');
+        }
+        
+        // Direkt başlatmayı dene
+        setTimeout(() => {
+            music.currentTime = 15;
+            music.volume = 0.5;
+            music.play().then(() => {
+                console.log('🎵 Müzik otomatik başladı!');
+            }).catch(() => {
+                console.log('Otomatik başlatma engellendi, alternatif deneniyor...');
+                // Alternatif yöntem: fake user interaction
+                setTimeout(() => {
+                    music.currentTime = 15;
+                    music.volume = 0.5;
+                    music.play();
+                    console.log('🎵 Alternatif yöntemle başladı!');
+                }, 100);
+            });
+        }, 500);
+        
+        // 1 saniye sonra kontrol et
+        setTimeout(() => {
+            if (music.paused) {
+                music.currentTime = 15;
+                music.volume = 0.5;
+                music.play();
+                console.log('🎵 1 saniye sonra müzik başlatıldı!');
+            }
+        }, 1000);
+        
+        // 2 saniye sonra da kontrol et
+        setTimeout(() => {
+            if (music.paused) {
+                music.currentTime = 15;
+                music.volume = 0.5;
+                music.play();
+                console.log('🎵 2 saniye sonra müzik başlatıldı!');
+            }
+        }, 2000);
+        
+        // İlk 10 saniye her 200ms kontrol et
+        let checkCount = 0;
+        const musicChecker = setInterval(() => {
+            checkCount++;
+            if (music.paused) {
+                autoStartMusic();
+                console.log(`🎵 ${checkCount}. kontrol - müzik başlatılıyor...`);
+            } else {
+                console.log('✅ Müzik çalıyor, kontrol durduruluyor');
+                clearInterval(musicChecker);
+            }
+            
+            // 50 kez denedikten sonra durdur (10 saniye)
+            if (checkCount >= 50) {
+                clearInterval(musicChecker);
+                console.log('Müzik kontrol sistemi durdu');
+            }
+        }, 200);
+        
+        // "Tıkla" yazısına tıklanınca
+        const clickText = document.getElementById('click-text');
+        if (clickText) {
+            clickText.addEventListener('click', () => {
+                autoStartMusic();
+                clickText.style.display = 'none'; // Yazıyı gizle
+                console.log('🎵 "Tıkla" yazısına tıklanarak müzik başladı!');
+            });
+        }
+        
+        // Müzik başlarsa yazıyı gizle
+        music.addEventListener('play', () => {
+            if (clickText) {
+                clickText.style.display = 'none';
+                console.log('Müzik başladı, "tıkla" yazısı gizlendi');
+            }
+        });
+    }
     
     // Matrix efektini başlat
     createMatrixEffect();
+    console.log('Matrix efekti başlatıldı');
     
-    // 1. İlk mesaj: Sistem başlatılıyor...
-    const systemMessage = document.getElementById('system-message');
-    systemMessage.style.display = 'block';
-    systemMessage.style.opacity = '1';
-    await typeWriterEffect(systemMessage, '> Sistem başlatılıyor...', 50);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    systemMessage.style.opacity = '0';
-    await new Promise(resolve => setTimeout(resolve, 500));
-    systemMessage.style.display = 'none';
+    // Sistem bozuldu efektlerini başlat
+    startSystemCorruption();
+    console.log('System corruption başlatıldı');
     
-    // 2. Hoşgeldin mesajı
-    const welcomeMessage = document.getElementById('welcome-message');
-    welcomeMessage.style.display = 'block';
-    welcomeMessage.style.opacity = '1';
-    await typeWriterEffect(welcomeMessage, '> Hoşgeldin Deniz...', 50);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    welcomeMessage.style.opacity = '0';
-    await new Promise(resolve => setTimeout(resolve, 500));
-    welcomeMessage.style.display = 'none';
+    // Yıkıntı efektlerini başlat
+    startRuinsEffects();
+    console.log('Ruins effects başlatıldı');
     
-    // 3. Mesaj containerı göster
-    const messageContainer = document.getElementById('message-container');
-    messageContainer.style.display = 'block';
+    // Elementleri al
+    const systemCrashMsg = document.getElementById('system-crash-msg');
+    const dataDeleteMsg = document.getElementById('data-delete-msg');
+    const loadingContainer = document.getElementById('loading-container');
     
-    // 4. Müzik başlat
-    const music = new Audio('./music.mp3');
-    music.loop = true;
-    music.volume = 0.5;
-    music.play().catch(() => {
-        document.addEventListener('click', () => music.play(), { once: true });
-    });
+    console.log('Elementler bulundu:', { systemCrashMsg, dataDeleteMsg, loadingContainer });
     
-    // 5. Diğer mesajları sırayla göster
-    const messages = document.querySelectorAll('.message');
-    for (let i = 1; i < messages.length; i++) {
-        const message = messages[i];
-        message.style.display = 'block';
-        await typeWriterEffect(message, message.textContent.trim(), 30);
-        await new Promise(resolve => setTimeout(resolve, 1500));
-    }
+    // AKIŞ BAŞLAT
     
-    // 6. Butonları göster
-    const buttons = document.querySelector('.buttons');
-    buttons.style.display = 'flex';
-    buttons.style.opacity = '1';
+         // 1. Önce "Sistem başlatılıyor..." göster (3 saniye)
+     systemCrashMsg.style.display = 'block';
+     console.log('1. Sistem başlatılıyor mesajı gösteriliyor...');
     
-    // 7. Buton eventlerini ekle
-    const noBtn = document.getElementById('no-btn');
-    const yesBtn = document.getElementById('yes-btn');
-    
-    // Hayır butonu için
-    function moveNoButton() {
-        const maxX = window.innerWidth - noBtn.offsetWidth;
-        const maxY = window.innerHeight - noBtn.offsetHeight;
+    setTimeout(() => {
+        // 2. "Herşey yalanmış..." göster (3 saniye)
+        systemCrashMsg.style.display = 'none';
+        dataDeleteMsg.style.display = 'block';
+        console.log('2. Herşey yalanmış mesajı gösteriliyor...');
         
-        const newX = Math.random() * maxX;
-        const newY = Math.random() * maxY;
-        
-        noBtn.style.position = 'fixed';
-        noBtn.style.left = newX + 'px';
-        noBtn.style.top = newY + 'px';
-    }
-    
-    noBtn.addEventListener('mouseover', moveNoButton);
-    noBtn.addEventListener('click', async (e) => {
-        const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScgkzUhBORUYICu87YLZdStjfSGWtzAe3IKhuAqrdxI9-T4UA/formResponse';
-        
-        try {
-            await fetch(`${formUrl}?entry.920808357=Hayır`, {
-                method: 'GET',
-                mode: 'no-cors',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                }
-            });
-            console.log('Cevap kaydedildi: HAYIR');
-        } catch (error) {
-            console.error('Form gönderiminde hata:', error);
-        }
-        
-        moveNoButton();
-    });
-    
-    // Evet butonu için
-    yesBtn.addEventListener('click', async () => {
-        // Google Forms'a veri gönder
-        const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScgkzUhBORUYICu87YLZdStjfSGWtzAe3IKhuAqrdxI9-T4UA/formResponse';
-        
-        try {
-            await fetch(`${formUrl}?entry.920808357=Evet`, {
-                method: 'GET',
-                mode: 'no-cors',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                }
-            });
-            console.log('Cevap kaydedildi: EVET');
-        } catch (error) {
-            console.error('Form gönderiminde hata:', error);
-        }
-        
-        // Mevcut mesajları gizle
-        messageContainer.style.display = 'none';
-        
-        
-        // Özel stil ekle
-        const style = document.createElement('style');
-        style.textContent = `
-            .love-card {
-                background: linear-gradient(45deg, #000000, #1a0012);
-                padding: 40px;
-                border-radius: 20px;
-                border: 3px solid #ff69b4;
-                box-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
-                text-align: center;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                max-width: 80%;
-                animation: cardGlow 2s infinite;
-                z-index: 1000;
-            }
-
-            .love-message {
-                color: #ff69b4;
-                font-size: 2.5em;
-                text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
-                margin-bottom: 20px;
-                font-family: 'Arial', sans-serif;
-            }
-
-            .love-submessage {
-                color: #ff8dc7;
-                font-size: 1.2em;
-                text-shadow: 0 0 8px rgba(255, 141, 199, 0.8);
-                margin-top: 30px;
-                font-family: 'Arial', sans-serif;
-                letter-spacing: 2px;
-            }
-
-            @keyframes cardGlow {
-                0% { box-shadow: 0 0 30px rgba(255, 105, 180, 0.5); }
-                50% { box-shadow: 0 0 50px rgba(255, 105, 180, 0.8); }
-                100% { box-shadow: 0 0 30px rgba(255, 105, 180, 0.5); }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Kart container'ı oluştur
-        const card = document.createElement('div');
-        card.className = 'love-card';
-        document.body.appendChild(card);
-        
-        // Ana mesaj için div
-        const mainMessage = document.createElement('div');
-        mainMessage.className = 'love-message';
-        card.appendChild(mainMessage);
-        
-        // Alt mesaj için div
-        const subMessage = document.createElement('div');
-        subMessage.className = 'love-submessage';
-        card.appendChild(subMessage);
-        
-        // Konfeti efektleri
-        const colors = ['#FF69B4', '#FF1493', '#FF69B4', '#FFB6C1', '#FFC0CB'];
-        
-        confetti({
-            particleCount: 150,
-            spread: 100,
-            origin: { y: 0.6 },
-            colors: colors
-        });
-
         setTimeout(() => {
-            confetti({
-                particleCount: 70,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: colors
-            });
-
-            confetti({
-                particleCount: 70,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: colors
-            });
-        }, 500);
-
-        // Sürekli konfeti
-        const duration = 5 * 1000;
-        const end = Date.now() + duration;
-
-        const frame = () => {
-            confetti({
-                particleCount: 2,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: colors
-            });
+            // 3. Loading bar göster ve başlat (3 saniye)
+            dataDeleteMsg.style.display = 'none';
+            loadingContainer.style.display = 'block';
+            console.log('3. Loading başlatılıyor...');
             
-            confetti({
-                particleCount: 2,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: colors
+            startDataDeletion().then(() => {
+                // 4. Final mesajı göster
+                loadingContainer.style.display = 'none';
+                console.log('4. Final mesaj gösteriliyor...');
+                showFinalMessage();
             });
-
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
-        };
-        
-        // Mesajları yaz
-        await typeWriterEffect(mainMessage, '❤️ Seni Çok Seviyorum Deniz! ❤️', 50);
-        await new Promise(resolve => setTimeout(resolve, 500));
-        await typeWriterEffect(subMessage, '💝 Bu anı hiç unutmayacağım... 💝', 50);
-        
-        // Konfeti yağmurunu başlat
-        frame();
-    });
+        }, 3000);
+    }, 3000);
 });
 
-// Matrix efekti ve diğer yardımcı fonksiyonlar aynı kalacak...
+// Sistem bozulma efektleri
+function startSystemCorruption() {
+    // Static overlay'i aktifleştir
+    const staticOverlay = document.querySelector('.static-overlay');
+    staticOverlay.style.opacity = '1';
+    
+    // Random screen tear efektleri
+    setInterval(() => {
+        if (Math.random() > 0.8) {
+            createScreenTear();
+        }
+    }, 2000);
+}
 
-// Matrix efekti - yeşil yazılar
+function triggerGlitch() {
+    const staticOverlay = document.querySelector('.static-overlay');
+    staticOverlay.style.opacity = '1';
+    
+    setTimeout(() => {
+        staticOverlay.style.opacity = '0.3';
+    }, 200);
+}
+
+function createScreenTear() {
+    const tear = document.createElement('div');
+    tear.className = 'screen-tear';
+    tear.style.top = Math.random() * window.innerHeight + 'px';
+    document.body.appendChild(tear);
+    
+    setTimeout(() => {
+        document.body.removeChild(tear);
+    }, 800);
+}
+
+// Matrix efekti - kırık kalpler
 function createMatrixEffect() {
     const canvas = document.createElement('canvas');
     canvas.style.position = 'fixed';
@@ -252,23 +212,26 @@ function createMatrixEffect() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Sadece kalp karakteri kullan
-    const hearts = ['♥'];
-    const fontSize = 14; // Kalplerin boyutu
+    // Kırık kalp karakterleri kullan
+    const brokenHearts = ['💔', '🖤', '💀', '⚡', '❌'];
+    const fontSize = 16; // Karakterlerin boyutu
     const columns = canvas.width / fontSize;
     const drops = Array(Math.floor(columns)).fill(1);
 
     function draw() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#0F0'; // Matrix yeşili
-        ctx.font = `${fontSize}px Arial`; // Kalpler için daha uygun font
+        
+        // Random renk seç (kırmızı/gri tonları)
+        const colors = ['#ff0000', '#800000', '#666666', '#333333', '#ff3333'];
+        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+        ctx.font = `${fontSize}px Arial`;
 
         for (let i = 0; i < drops.length; i++) {
-            const heart = hearts[Math.floor(Math.random() * hearts.length)];
-            ctx.fillText(heart, i * fontSize, drops[i] * fontSize);
+            const symbol = brokenHearts[Math.floor(Math.random() * brokenHearts.length)];
+            ctx.fillText(symbol, i * fontSize, drops[i] * fontSize);
             
-            // Kalplerin düşme hızını ve yeniden başlama olasılğını ayarla
+            // Karakterlerin düşme hızını ve yeniden başlama olasılığını ayarla
             if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
@@ -282,19 +245,34 @@ function createMatrixEffect() {
         canvas.height = window.innerHeight;
     });
 
-    setInterval(draw, 33); // Yaklaşık 30 FPS
+    setInterval(draw, 40); // Biraz daha yavaş (25 FPS)
 }
 
 // Daktilo efekti
 function typeWriterEffect(element, text, speed) {
     return new Promise(resolve => {
         let i = 0;
-        element.textContent = '';
+        element.innerHTML = ''; // textContent yerine innerHTML kullan
+        
+        // \n karakterlerini <br> ile değiştir
+        const formattedText = text.replace(/\n/g, '<br>');
         
         function type() {
-            if (i < text.length) {
-                element.textContent += text.charAt(i);
-                i++;
+            if (i < formattedText.length) {
+                // HTML tag'larını doğru işle
+                if (formattedText.charAt(i) === '<') {
+                    const tagEnd = formattedText.indexOf('>', i);
+                    if (tagEnd !== -1) {
+                        element.innerHTML += formattedText.substring(i, tagEnd + 1);
+                        i = tagEnd + 1;
+                    } else {
+                        element.innerHTML += formattedText.charAt(i);
+                        i++;
+                    }
+                } else {
+                    element.innerHTML += formattedText.charAt(i);
+                    i++;
+                }
                 setTimeout(type, speed);
             } else {
                 setTimeout(resolve, 500);
@@ -305,27 +283,134 @@ function typeWriterEffect(element, text, speed) {
     });
 }
 
-// CSS ekleyelim
-const style = document.createElement('style');
-style.textContent += `
-    .message, .welcome-message {
-        color: #0F0;
-        text-shadow: 0 0 5px #0F0;
-        font-family: 'Courier New', monospace;
-        font-size: 1.5em;
-        margin: 20px 0;
-        opacity: 0;
-        display: none;
-        transition: opacity 0.5s;
+// CSS override kaldırıldı - HTML'deki CSS'i kullanıyoruz
+
+// Yıkıntı efektlerini başlat
+function startRuinsEffects() {
+    // Sistem parçacıklarını oluştur
+    createSystemFragments();
+    
+    // Corruption lines oluştur
+    createCorruptionLines();
+    
+    // Random sistem arızaları
+    setInterval(() => {
+        if (Math.random() > 0.7) {
+            triggerSystemGlitch();
+        }
+    }, 1000);
+}
+
+function createSystemFragments() {
+    const container = document.querySelector('.system-fragments');
+    const fragments = ['ERROR', '404', 'NULL', 'CRASH', '💔', 'FAILED', 'LOST', 'BROKEN'];
+    
+    setInterval(() => {
+        const fragment = document.createElement('div');
+        fragment.className = 'fragment';
+        fragment.textContent = fragments[Math.floor(Math.random() * fragments.length)];
+        fragment.style.left = Math.random() * window.innerWidth + 'px';
+        fragment.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        container.appendChild(fragment);
+        
+        setTimeout(() => {
+            container.removeChild(fragment);
+        }, 5000);
+    }, 500);
+}
+
+function createCorruptionLines() {
+    const container = document.querySelector('.corruption-lines');
+    
+    setInterval(() => {
+        const line = document.createElement('div');
+        line.className = 'corruption-line';
+        line.style.top = Math.random() * window.innerHeight + 'px';
+        line.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(line);
+        
+        setTimeout(() => {
+            container.removeChild(line);
+        }, 3000);
+    }, 800);
+}
+
+function triggerSystemGlitch() {
+    const ruinsOverlay = document.querySelector('.ruins-overlay');
+    const systemNoise = document.querySelector('.system-noise');
+    
+    // Ruins overlay'i geçici olarak göster
+    ruinsOverlay.style.opacity = '1';
+    systemNoise.style.opacity = '0.3';
+    
+    setTimeout(() => {
+        ruinsOverlay.style.opacity = '0';
+        systemNoise.style.opacity = '0.1';
+    }, 150);
+}
+
+function showFinalMessage() {
+    console.log('showFinalMessage çağrıldı!');
+    
+    // Müziği normal hızda tut
+    const music = document.getElementById('background-music');
+    if (music) {
+        music.playbackRate = 1.0; // Müziği normal hızında çal
+        music.volume = 0.7; // Ses seviyesini artır
+        console.log('Müzik normal hızda tutuluyor');
     }
-`;
-document.head.appendChild(style);
-// Konfeti için script'i yükle
-function loadConfetti() {
-    return new Promise((resolve) => {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js';
-        script.onload = resolve;
-        document.head.appendChild(script);
+    
+    // Tüm yıkıntı efektlerini maksimuma çıkar
+    intensifyRuinsEffects();
+    
+    // Final mesaj container'ını göster
+    const finalContainer = document.getElementById('final-message-container');
+    if (finalContainer) {
+        finalContainer.style.display = 'block';
+        console.log('Final message container gösterildi');
+    } else {
+        console.error('Final message container bulunamadı!');
+    }
+}
+
+// Yıkıntı efektlerini yoğunlaştır
+function intensifyRuinsEffects() {
+    const ruinsOverlay = document.querySelector('.ruins-overlay');
+    const systemNoise = document.querySelector('.system-noise');
+    
+    // Efektleri daha yoğun yap
+    ruinsOverlay.style.opacity = '0.8';
+    systemNoise.style.opacity = '0.5';
+    
+    // Daha sık glitch efektleri
+    setInterval(() => {
+        triggerSystemGlitch();
+    }, 300);
+}
+
+// Loading ve veri silme animasyonu
+function startDataDeletion() {
+    return new Promise(resolve => {
+        const loadingFill = document.querySelector('.loading-fill');
+        const loadingPercent = document.getElementById('loading-percent');
+        let progress = 0;
+        
+        const interval = setInterval(() => {
+            progress += Math.random() * 15 + 5; // Random artış
+            if (progress > 100) progress = 100;
+            
+            loadingFill.style.width = progress + '%';
+            loadingPercent.textContent = Math.floor(progress) + '%';
+            
+            // Random glitch efektleri loading sırasında
+            if (Math.random() > 0.7) {
+                triggerSystemGlitch();
+            }
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(resolve, 1000);
+            }
+        }, 200);
     });
 }
